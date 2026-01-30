@@ -109,13 +109,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       groq: [
         { value: 'deepseek-r1-distill-llama-70b', label: 'deepseek-r1-distill-llama-70b' },
         { value: 'llama-3.3-70b-versatile', label: 'llama-3.3-70b-versatile' },
+        { value: 'openai/gpt-oss-120b', label: 'openai/gpt-oss-120b' }
 
       ],
       openai: [
         { value: 'gpt-4o', label: 'GPT-4o' },
         { value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
 
-      ] 
+      ],
+      testleaf: [
+        { value: 'ft:gpt-4o-mini-2024-07-18:qeagle-2::CKCnjBzx', label: 'Leaftaps SFT' }
+      ]
     };
     
     // Function to update model options based on selected provider

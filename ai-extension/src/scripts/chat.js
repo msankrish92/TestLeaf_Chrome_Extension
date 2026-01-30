@@ -553,6 +553,7 @@ class ChatUI {
     }
 
     getPromptKeys(language, engine) {
+    
         const checkboxes = Array.from(document.querySelectorAll('input[name="javaGenerationMode"]:checked'));
         const promptKeys = [];
         const lang = language?.toLowerCase() || '';
@@ -561,13 +562,17 @@ class ChatUI {
         // Extract selected generation modes
         const isFeatureChecked = checkboxes.some(box => box.value === 'FEATURE');
         const isPageChecked = checkboxes.some(box => box.value === 'PAGE');
+        const isTestDataChecked = checkboxes.some(box => box.value === 'TESTDATA');
+        // const isTestDataChecked = true; // Always generate test data for now
 
         // Validate that at least one option is selected
-        if (!isFeatureChecked && !isPageChecked) {
+        if (!isFeatureChecked && !isPageChecked && !isTestDataChecked) {
             console.warn('No generation mode selected. Defaulting to Page Object generation.');
             // Default fallback to page object generation
             if (this.isJavaSelenium(lang, eng)) {
                 promptKeys.push('SELENIUM_JAVA_PAGE_ONLY');
+            }else if (this.isTypeScriptPlaywright(lang, eng)) {
+                promptKeys.push('PLAYWRIGHT_TS_PAGE_ONLY');
             }
             return promptKeys;
         }
@@ -587,11 +592,19 @@ class ChatUI {
             promptKeys.push('CUCUMBER_ONLY');
         } else if (isPageChecked) {
             // Page object only
+            console.log('Generating Page Object for', lang, eng);
             if (this.isJavaSelenium(lang, eng)) {
                 promptKeys.push('SELENIUM_JAVA_PAGE_ONLY');
+            } else if (this.isTypeScriptPlaywright(lang, eng)) {
+                promptKeys.push('PLAYWRIGHT_TS_PAGE_ONLY');
             } else {
                 this.addUnsupportedLanguageMessage(lang, eng);
             }
+        }
+
+        if (isTestDataChecked) {
+            console.log('Test Data generation selected');
+            promptKeys.push('TESTDATA_CREATION');
         }
 
         return promptKeys;
@@ -610,6 +623,10 @@ class ChatUI {
 
     isPythonSelenium(language, engine) {
         return language === 'python' && engine === 'selenium';
+    }
+
+    isTypeScriptPlaywright(language, engine) {
+        return language === 'ts' && engine === 'playwright';
     }
 
     // typescript/selenium not supported by the selenium webdriver

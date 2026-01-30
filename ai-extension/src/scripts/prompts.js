@@ -2,6 +2,97 @@
  * Collection of default prompts for different use cases (ICE POT Format)
  */
 export const DEFAULT_PROMPTS = {
+
+
+  /**
+ * Playwright TypeScript Page Object Prompt (No Test Class)
+ */
+TESTDATA_CREATION: `
+  Instructions:
+  - Generate test data for the given DOM.
+  - Provide data tablular format with headers.
+  - Ensure data matches the input fields in the DOM.
+  - Consider positive, negative and edge test cases.
+
+  Context:
+  DOM:
+  \`\`\`html
+  \${domContent}
+  \`\`\`
+
+  Example:
+  \`\`\`
+  | Test Case ID   | Username (email)                            | Password       | Remember Me | Expected Result                                                   |
+| -------------- | ------------------------------------------- | -------------- | ----------- | ----------------------------------------------------------------- |
+| TC01\_Positive | [user@example.com](mailto:user@example.com) | ValidPass\@123 | Checked     | Login successful, redirected to home/dashboard                    |
+| TC02\_Negative | invalid-email-format                        | short          | Unchecked   | Error shown: "Please enter a valid username" / "Invalid password" |
+
+  \`\`\`
+
+  Persona:
+  - Audience: QA Engineer / Test Data Specialist focusing on Translating DOM inputs into well-structured, realistic, and varied test data.
+
+  Output Format:
+  - Output format: A markdown table inside a \`\`\`markdown\`\`\` block.
+
+  Tone:
+  - Clean, maintainable, enterprise-ready.
+`
+  ,
+
+
+  /**
+ * Playwright TypeScript Page Object Prompt (No Test Class)
+ */
+PLAYWRIGHT_TS_PAGE_ONLY: `
+  Instructions:
+  - Generate ONLY a Playwright TypeScript Page Object Class (no test code).
+  - Add TSDoc for methods & class.
+  - Use Playwright 1.20+ compatible imports.
+  - Use meaningful method names.
+  - Do NOT include explanations or test code.
+
+  Context:
+  DOM:
+  \`\`\`html
+  \${domContent}
+  \`\`\`
+
+  Example:
+  \`\`\`typescript
+  import { Page, Locator } from '@playwright/test';
+
+  /**
+   * Page Object for Component Page
+   */
+  export class ComponentPage {
+    readonly page: Page;
+    readonly exampleElement: Locator;
+
+    constructor(page: Page) {
+      this.page = page;
+      this.exampleElement = page.locator('#example');
+    }
+
+    /**
+     * Clicks on the example element
+     */
+    async clickExampleElement(): Promise<void> {
+      await this.exampleElement.click();
+    }
+  }
+  \`\`\`
+
+  Persona:
+  - Audience: Automation engineer focusing on maintainable POM structure.
+
+  Output Format:
+  - A single TypeScript class inside a \`\`\`typescript\`\`\` block.
+
+  Tone:
+  - Clean, maintainable, enterprise-ready.
+`
+  ,
  
   /**
    * Selenium Java Page Object Prompt (No Test Class)
@@ -216,4 +307,6 @@ export const CODE_GENERATOR_TYPES = {
   SELENIUM_JAVA_PAGE_ONLY: 'Selenium-Java-Page-Only',
   CUCUMBER_ONLY: 'Cucumber-Only',
   CUCUMBER_WITH_SELENIUM_JAVA_STEPS: 'Cucumber-With-Selenium-Java-Steps',
+  PLAYWRIGHT_TS_PAGE_ONLY: 'Playwright-TS-Page-Only',
+  TESTDATA_CREATION: 'TestData-Creation'
 };
